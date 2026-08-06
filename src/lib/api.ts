@@ -96,7 +96,8 @@ export const api = {
         id: user.id, 
         name: user.nama_guru || user.name || user.nama, 
         username: user.username, 
-        role: user.role === 'ADMIN' ? 'admin' : 'user' 
+        role: user.role === 'ADMIN' ? 'admin' : 'user',
+        school: user.school_name || ''
       },
       settings,
       subjects: subjects.filter((s) => s.status === "Aktif"),

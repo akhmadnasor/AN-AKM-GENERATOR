@@ -1,26 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { buildExternalAiPrompt } from '../lib/promptBuilder';
+import { parseExternalAiJson } from '../lib/jsonParser';
 
-export default function Wizard({ settings, subjects, onComplete }: { settings: any, subjects: any[], onComplete: (data: any) => void }) {
+export default function Wizard({ settings, subjects, user, onComplete }: { settings: any, subjects: any[], user: any, onComplete: (data: any) => void }) {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    identity: { school: '', level: 'SD/MI', phase: 'Fase A', grade: '1', semester: 'Ganjil', schoolYear: '2026/2027', subject: '', topic: '', duration: 90 },
-    learning: { cp: '', objectives: '' },
-    counts: { regular: 5, literacy: 5, numeracy: 5 },
-    forms: { pilihan_ganda: 5, pilihan_ganda_kompleks: 4, menjodohkan: 2, isian_singkat: 2, uraian: 2 },
-    difficulties: { mudah: 5, sedang: 7, sulit: 3 },
-    options: { enableLiteracy: true, enableNumeracy: true },
-    author: { name: '', role: 'Guru', date: new Date().toISOString().slice(0,10) }
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem('wizardDraft');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return {
+      identity: { school: user?.school || '', level: 'SD/MI', phase: 'Fase A', grade: '1', semester: 'Ganjil', schoolYear: '2026/2027', subject: '', topic: '', duration: 90 },
+      learning: { cp: '', objectives: '' },
+      counts: { regular: 5, literacy: 5, numeracy: 5 },
+      forms: { pilihan_ganda: 5, pilihan_ganda_kompleks: 4, menjodohkan: 2, isian_singkat: 2, uraian: 2 },
+      difficulties: { mudah: 5, sedang: 7, sulit: 3 },
+      options: { enableLiteracy: true, enableNumeracy: true, packageMode: 'Tunggal' },
+      author: { name: user?.name || '', role: 'Guru', date: new Date().toISOString().slice(0,10), nip: '', school: user?.school || '', city: '' }
+    };
   });
 
+  useEffect(() => {
+    localStorage.setItem('wizardDraft', JSON.stringify(formData));
+  }, [formData]);
+
+  const [aiJsonInput, setAiJsonInput] = useState('');
+  const [jsonError, setJsonError] = useState('');
+
+  const generatedPrompt = useMemo(() => buildExternalAiPrompt(formData), [formData]);
   const nextStep = () => { if (step < 5) setStep(step + 1); };
   const prevStep = () => { if (step > 1) setStep(step - 1); };
 
   const handleChange = (section: keyof typeof formData, field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [section]: { ...(prev[section] as any), [field]: value } }));
+    setFormData(prev => {
+      let newData = { ...prev, [section]: { ...(prev[section] as any), [field]: value } };
+      
+      // Auto-update phase and level when grade changes
+      if (section === 'identity' && field === 'grade') {
+        const gradeStr = String(value);
+        let phase = prev.identity.phase;
+        let level = prev.identity.level;
+        
+        if (['1', '2'].includes(gradeStr)) { phase = 'Fase A'; level = 'SD/MI'; }
+        else if (['3', '4'].includes(gradeStr)) { phase = 'Fase B'; level = 'SD/MI'; }
+        else if (['5', '6'].includes(gradeStr)) { phase = 'Fase C'; level = 'SD/MI'; }
+        else if (['7', '8', '9'].includes(gradeStr)) { phase = 'Fase D'; level = 'SMP/MTs'; }
+        
+        newData.identity.phase = phase;
+        newData.identity.level = level;
+      }
+      
+      // Auto-update grade when level changes
+      if (section === 'identity' && field === 'level') {
+        if (value === 'SD/MI' && ['7', '8', '9'].includes(String(prev.identity.grade))) {
+          newData.identity.grade = '1';
+          newData.identity.phase = 'Fase A';
+        } else if (value === 'SMP/MTs' && ['1', '2', '3', '4', '5', '6'].includes(String(prev.identity.grade))) {
+          newData.identity.grade = '7';
+          newData.identity.phase = 'Fase D';
+        }
+      }
+      
+      return newData;
+    });
   };
 
   const handleFinish = () => {
-    onComplete(formData);
+    try {
+      setJsonError('');
+      const parsedData = parseExternalAiJson(aiJsonInput);
+      localStorage.removeItem('wizardDraft');
+      onComplete(parsedData);
+    } catch (err: any) {
+      setJsonError(err.message || 'Gagal memproses JSON');
+    }
   };
 
   return (
@@ -63,10 +118,19 @@ export default function Wizard({ settings, subjects, onComplete }: { settings: a
               <label>Mata Pelajaran
                 <select value={formData.identity.subject} onChange={e => handleChange('identity', 'subject', e.target.value)}>
                   <option value="">Pilih...</option>
-                  {subjects.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+                  {subjects.filter(s => s.level === formData.identity.level || !s.level).map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
                 </select>
               </label>
               <label>Topik / Materi <input value={formData.identity.topic} onChange={e => handleChange('identity', 'topic', e.target.value)} /></label>
+              
+              <label>Semester
+                <select value={formData.identity.semester} onChange={e => handleChange('identity', 'semester', e.target.value)}>
+                  <option>Ganjil</option><option>Genap</option>
+                </select>
+              </label>
+              <label>Tahun Pelajaran <input value={formData.identity.schoolYear} onChange={e => handleChange('identity', 'schoolYear', e.target.value)} /></label>
+              <label>Nama Sekolah <input value={formData.identity.school} onChange={e => { handleChange('identity', 'school', e.target.value); handleChange('author', 'school', e.target.value); }} /></label>
+              <label>Alokasi Waktu (Menit) <input type="number" value={formData.identity.duration} onChange={e => handleChange('identity', 'duration', parseInt(e.target.value))} /></label>
             </div>
           </div>
         )}
@@ -124,28 +188,32 @@ export default function Wizard({ settings, subjects, onComplete }: { settings: a
 
         {step === 5 && (
           <div className="wizard-panel">
-            <div className="section-heading"><span>05</span><div><h2>Prompt AI dan Konverter Word</h2></div></div>
+            <div className="section-heading"><span>05</span><div><h2>Prompt AI dan Konversi JSON</h2></div></div>
             <div className="external-ai-grid">
               <article className="external-ai-card prompt-card">
-                <h3>1. Prompt JSON</h3>
-                <textarea className="code-textarea" readOnly value={JSON.stringify(formData, null, 2)} />
+                <h3>1. Salin Prompt JSON</h3>
+                <p>Salin teks ini dan tempel ke web AI (ChatGPT, Gemini, Claude, dll).</p>
+                <textarea className="code-textarea" readOnly value={generatedPrompt} />
+                <button type="button" className="btn btn-secondary btn-small" onClick={() => navigator.clipboard.writeText(generatedPrompt)}>Salin Prompt</button>
               </article>
               <article className="external-ai-card converter-card">
-                <h3>2. JSON ke Word</h3>
-                <p>Fitur ekspor dokumen telah disederhanakan pada versi ini.</p>
-                <button className="btn btn-primary" onClick={handleFinish}>Buka di Editor</button>
+                <h3>2. Tempel Hasil JSON</h3>
+                <p>Tempel balasan dari AI di sini untuk diubah menjadi soal utuh.</p>
+                <textarea className="code-textarea" placeholder="Tempel JSON dari AI di sini..." value={aiJsonInput} onChange={e => setAiJsonInput(e.target.value)} />
+                {jsonError && <p className="error-text" style={{ color: 'red', marginTop: '0.5rem', fontSize: '0.875rem' }}>{jsonError}</p>}
+                <button type="button" className="btn btn-primary" onClick={handleFinish} style={{ marginTop: '1rem' }}>Buka di Editor</button>
               </article>
             </div>
           </div>
         )}
 
         <div className="wizard-actions">
-          <button className={`btn btn-secondary ${step === 1 ? 'invisible' : ''}`} onClick={prevStep}>← Sebelumnya</button>
+          <button type="button" className={`btn btn-secondary ${step === 1 ? 'invisible' : ''}`} onClick={prevStep}>← Sebelumnya</button>
           <span>Draft tersimpan</span>
           {step < 5 ? (
-            <button className="btn btn-primary" onClick={nextStep}>Selanjutnya →</button>
+            <button type="button" className="btn btn-primary" onClick={nextStep}>Selanjutnya →</button>
           ) : (
-            <button className="btn btn-primary" onClick={handleFinish}>Selesai ✓</button>
+            <button type="button" className="btn btn-primary" onClick={handleFinish}>Selesai ✓</button>
           )}
         </div>
       </form>

@@ -4,6 +4,7 @@ import Shell from './components/Shell';
 import Dashboard from './components/Dashboard';
 import Wizard from './components/Wizard';
 import Admin from './components/Admin';
+import Editor from './components/Editor';
 import { api } from './lib/api';
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
   const [subjects, setSubjects] = useState<any[]>([]);
   const [activeSection, setActiveSection] = useState('dashboard');
   const [loading, setLoading] = useState(true);
+  const [generatedData, setGeneratedData] = useState<any>(null);
 
   useEffect(() => {
     let token = null;
@@ -67,7 +69,7 @@ export default function App() {
       setActiveSection={setActiveSection}
     >
       {activeSection === 'dashboard' && <Dashboard user={user} onNavigate={setActiveSection} />}
-      {activeSection === 'wizard' && <Wizard settings={settings} subjects={subjects} onComplete={(d) => { console.log(d); setActiveSection('editor'); }} />}
+      {activeSection === 'wizard' && <Wizard settings={settings} subjects={subjects} user={user} onComplete={(d) => { setGeneratedData(d); setActiveSection('editor'); }} />}
       {activeSection === 'admin' && <Admin />}
       {activeSection === 'draft' && (
         <div className="simple-page panel">
@@ -90,13 +92,7 @@ export default function App() {
           <p>Modul bank stimulus dan kualitas belum terhubung di preview ini.</p>
         </div>
       )}
-      {activeSection === 'editor' && (
-        <div className="simple-page panel">
-          <span className="simple-icon">W</span>
-          <h1>Editor Hasil</h1>
-          <p>Soal telah dikonfigurasi. Siap untuk diunduh sebagai JSON atau DOCX.</p>
-        </div>
-      )}
+      {activeSection === 'editor' && <Editor data={generatedData} />}
     </Shell>
   );
 }
