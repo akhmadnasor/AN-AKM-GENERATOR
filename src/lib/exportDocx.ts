@@ -162,7 +162,7 @@ export async function exportToDocx(data: any) {
                 width: { size: 40, type: WidthType.PERCENTAGE },
                 children: [
                   new Paragraph({ children: [new TextRun({ text: "Capaian Pembelajaran:", bold: true })] }),
-                  new Paragraph({ text: data?.pembelajaran?.capaian_pembelajaran || '-' }),
+                  new Paragraph({ text: (Array.isArray(data?.pembelajaran) ? data.pembelajaran.map((p: any) => p.capaian_pembelajaran).join("\n") : data?.pembelajaran?.capaian_pembelajaran) || '-' }),
                 ],
                 margins: { top: 100, bottom: 100, left: 100, right: 100 }
               }),

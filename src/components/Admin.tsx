@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../lib/api';
+import { RefreshCw } from 'lucide-react';
 
 export default function Admin() {
   const [data, setData] = useState<any>(null);
@@ -35,7 +36,9 @@ export default function Admin() {
           <span className="eyebrow dark">ADMINISTRATOR</span>
           <h1>Pengelolaan Aplikasi</h1>
         </div>
-        <button className="btn btn-secondary" onClick={loadData}>↻ Muat Ulang</button>
+        <button className="btn btn-secondary" onClick={loadData} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <RefreshCw size={16} /> Muat Ulang
+        </button>
       </div>
 
       <div className="admin-stats">

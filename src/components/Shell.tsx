@@ -1,4 +1,15 @@
 import React, { useState } from 'react';
+import { 
+  LayoutDashboard, 
+  Sparkles, 
+  Briefcase, 
+  Save, 
+  HelpCircle, 
+  Settings, 
+  LogOut, 
+  Menu, 
+  ChevronRight 
+} from 'lucide-react';
 
 interface ShellProps {
   user: any;
@@ -18,15 +29,15 @@ export default function Shell({ user, settings, onLogout, children, activeSectio
   };
 
   const navItems = [
-    { id: 'dashboard', icon: '⌂', label: 'Dashboard' },
-    { id: 'wizard', icon: '✦', label: 'Buat Soal' },
-    { id: 'workspace', icon: '◇', label: 'Ruang Kerja' },
-    { id: 'draft', icon: '▣', label: 'Draft Lokal' },
-    { id: 'guide', icon: '?', label: 'Panduan' },
+    { id: 'dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
+    { id: 'wizard', icon: <Sparkles size={18} />, label: 'Buat Soal' },
+    { id: 'workspace', icon: <Briefcase size={18} />, label: 'Ruang Kerja' },
+    { id: 'draft', icon: <Save size={18} />, label: 'Draft Lokal' },
+    { id: 'guide', icon: <HelpCircle size={18} />, label: 'Panduan' },
   ];
 
   if (user?.role === 'admin') {
-    navItems.push({ id: 'admin', icon: '⚙', label: 'Menu Admin' });
+    navItems.push({ id: 'admin', icon: <Settings size={18} />, label: 'Menu Admin' });
   }
 
   const sectionTitles: Record<string, [string, string]> = {
@@ -59,18 +70,25 @@ export default function Shell({ user, settings, onLogout, children, activeSectio
           <button className="profile-button">
             <span>{user?.name?.[0]?.toUpperCase() || 'U'}</span>
             <span><strong>{user?.name}</strong><small>{user?.role === 'admin' ? 'Administrator' : 'Guru'}</small></span>
-            <b>›</b>
+            <ChevronRight size={16} />
           </button>
-          <button className="logout-button" onClick={onLogout}><span>↪</span>Keluar</button>
+          <button className="logout-button" onClick={onLogout} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LogOut size={16} />
+            Keluar
+          </button>
         </div>
       </aside>
 
       <header className="topbar">
-        <button className="icon-button mobile-only" onClick={() => setSidebarOpen(!sidebarOpen)}>☰</button>
+        <button className="icon-button mobile-only" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <Menu size={20} />
+        </button>
         <div><h2>{title}</h2><p>{subtitle}</p></div>
         <div className="top-actions">
           <span className="status-dot"><i></i>Tersimpan lokal</span>
-          <button className="btn btn-primary btn-small" onClick={() => handleNav('wizard')}>＋ Buat Soal</button>
+          <button className="btn btn-primary btn-small" onClick={() => handleNav('wizard')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Sparkles size={16} /> Buat Soal
+          </button>
         </div>
       </header>
 

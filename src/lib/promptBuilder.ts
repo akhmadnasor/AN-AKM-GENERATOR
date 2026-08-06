@@ -57,13 +57,13 @@ export function buildExternalAiPrompt(data: any) {
       mode_paket: data.options.packageMode || 'Tunggal',
       komponen_akm: akmConfiguration
     },
-    pembelajaran: {
-      capaian_pembelajaran: data.learning.cp || '',
-      tujuan_pembelajaran: data.learning.objectives,
-      indikator: data.learning.indicators || '',
-      batasan_materi: data.learning.limits || '',
-      catatan: data.learning.notes || ''
-    },
+    pembelajaran: (Array.isArray(data.learning) ? data.learning : [data.learning]).map((l: any) => ({
+      capaian_pembelajaran: l.cp || "",
+      tujuan_pembelajaran: l.objectives || "",
+      indikator: l.indicators || "",
+      batasan_materi: l.limits || "",
+      catatan: l.notes || ""
+    })),
     penyusun: {
       nama: data.author.name || '',
       nip_niy: data.author.nip || '',

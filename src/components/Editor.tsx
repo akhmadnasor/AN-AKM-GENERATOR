@@ -1,11 +1,12 @@
 import React from 'react';
 import { exportToDocx } from '../lib/exportDocx';
+import { Download, FileText, Printer, FileJson, Image as ImageIcon } from 'lucide-react';
 
 export default function Editor({ data, onPrint }: { data: any, onPrint?: () => void }) {
   if (!data) {
     return (
       <div className="simple-page panel">
-        <span className="simple-icon">W</span>
+        <span className="simple-icon"><FileText size={48} color="#94a3b8" /></span>
         <h1>Editor Hasil</h1>
         <p>Belum ada data soal. Silakan selesaikan konfigurasi di menu Buat Soal terlebih dahulu.</p>
       </div>
@@ -35,9 +36,17 @@ export default function Editor({ data, onPrint }: { data: any, onPrint?: () => v
           <h1>Pratinjau Asesmen</h1>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-          {onPrint && <button className="btn btn-secondary" onClick={onPrint}>🖨️ Cetak Layar</button>}
-          <button className="btn btn-secondary" onClick={downloadJson}>↓ Unduh JSON</button>
-          <button className="btn btn-primary" onClick={downloadDocx}>W Unduh Word</button>
+          {onPrint && (
+            <button className="btn btn-secondary" onClick={onPrint} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Printer size={16} /> Cetak Layar
+            </button>
+          )}
+          <button className="btn btn-secondary" onClick={downloadJson} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FileJson size={16} /> Unduh JSON
+          </button>
+          <button className="btn btn-primary" onClick={downloadDocx} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FileText size={16} /> Unduh Word
+          </button>
         </div>
       </div>
       
@@ -71,7 +80,7 @@ export default function Editor({ data, onPrint }: { data: any, onPrint?: () => v
                         {st.gambar && (
                           <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
                             <span style={{ color: '#64748b', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <span>📷</span>
+                              <span><ImageIcon size={20} /></span>
                               <span>[GAMBAR]: {st.gambar}</span>
                             </span>
                           </div>
@@ -108,7 +117,7 @@ export default function Editor({ data, onPrint }: { data: any, onPrint?: () => v
                 {s.gambar && (
                   <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
                     <span style={{ color: '#64748b', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span>📷</span>
+                      <span><ImageIcon size={20} /></span>
                       <span>[GAMBAR]: {s.gambar}</span>
                     </span>
                   </div>

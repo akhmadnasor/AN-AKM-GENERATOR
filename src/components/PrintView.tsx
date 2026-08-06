@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Printer, ArrowLeft } from 'lucide-react';
 
 export default function PrintView({ data, onBack }: { data: any, onBack: () => void }) {
   if (!data) {
@@ -22,8 +23,12 @@ export default function PrintView({ data, onBack }: { data: any, onBack: () => v
           <p style={{ margin: 0, color: '#64748b', fontSize: '0.875rem' }}>Sesuaikan setelan printer Anda (margin, ukuran kertas) sebelum mencetak.</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn btn-secondary" onClick={onBack}>← Kembali ke Editor</button>
-          <button className="btn btn-primary" onClick={handlePrint}>🖨️ Cetak Sekarang</button>
+          <button className="btn btn-secondary" onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <ArrowLeft size={16} /> Kembali ke Editor
+          </button>
+          <button className="btn btn-primary" onClick={handlePrint} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Printer size={16} /> Cetak Sekarang
+          </button>
         </div>
       </div>
 

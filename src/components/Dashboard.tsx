@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ArrowRight, BookOpen, FileText, Calculator, Download, Check, File } from 'lucide-react';
 
 export default function Dashboard({ user, onNavigate }: { user: any, onNavigate: (s: string) => void }) {
   const firstName = user?.name?.split(' ')[0] || 'Pengguna';
@@ -23,20 +24,22 @@ export default function Dashboard({ user, onNavigate }: { user: any, onNavigate:
           <span className="eyebrow dark">AN/AKM GENERATOR • VERSI 5.3.0</span>
           <h1>Selamat datang, <span>{firstName}</span>!</h1>
           <p>Susun asesmen reguler, literasi, dan numerasi yang terstruktur untuk SD/MI hingga SMP/MTs.</p>
-          <button className="btn btn-light" onClick={() => onNavigate('wizard')}>Mulai Buat Soal <b>→</b></button>
+          <button className="btn btn-light" onClick={() => onNavigate('wizard')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            Mulai Buat Soal <ArrowRight size={16} />
+          </button>
         </div>
         <div className="welcome-visual">
           <div className="paper-card p1"><span>Literasi</span><b>A B C D</b></div>
           <div className="paper-card p2"><span>Numerasi</span><b>12 + 8</b></div>
-          <div className="blue-orb">✓</div>
+          <div className="blue-orb" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Check size={20} color="#fff" strokeWidth={3} /></div>
         </div>
       </div>
 
       <div className="quick-grid">
-        <article><span className="quick-icon blue">R</span><div><b>Soal Reguler</b><p>Sesuai materi, CP, dan tujuan.</p></div></article>
-        <article><span className="quick-icon violet">L</span><div><b>Literasi Membaca</b><p>Stimulus teks dan kognitif.</p></div></article>
-        <article><span className="quick-icon amber">N</span><div><b>Numerasi</b><p>Data dan masalah kuantitatif.</p></div></article>
-        <article><span className="quick-icon green">W</span><div><b>Word & JSON</b><p>Unduh naskah Word & JSON.</p></div></article>
+        <article><span className="quick-icon blue"><FileText size={24} /></span><div><b>Soal Reguler</b><p>Sesuai materi, CP, dan tujuan.</p></div></article>
+        <article><span className="quick-icon violet"><BookOpen size={24} /></span><div><b>Literasi Membaca</b><p>Stimulus teks dan kognitif.</p></div></article>
+        <article><span className="quick-icon amber"><Calculator size={24} /></span><div><b>Numerasi</b><p>Data dan masalah kuantitatif.</p></div></article>
+        <article><span className="quick-icon green"><Download size={24} /></span><div><b>Word & JSON</b><p>Unduh naskah Word & JSON.</p></div></article>
       </div>
 
       <div className="dashboard-grid">
@@ -66,11 +69,13 @@ export default function Dashboard({ user, onNavigate }: { user: any, onNavigate:
                 Materi: {draftInfo.identity?.topic || '-'}<br />
                 Penyusun: {draftInfo.author?.name || '-'}
               </p>
-              <button className="btn btn-secondary btn-small" onClick={() => onNavigate('wizard')}>Lanjutkan Draft <b>→</b></button>
+              <button className="btn btn-secondary btn-small" onClick={() => onNavigate('wizard')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                Lanjutkan Draft <ArrowRight size={14} />
+              </button>
             </div>
           ) : (
             <div className="empty-state">
-              <span>▤</span><strong>Belum ada draft</strong><p>Isian wizard akan disimpan otomatis.</p>
+              <span><File size={32} color="#cbd5e1" strokeWidth={1.5} /></span><strong>Belum ada draft</strong><p>Isian wizard akan disimpan otomatis.</p>
             </div>
           )}
         </article>

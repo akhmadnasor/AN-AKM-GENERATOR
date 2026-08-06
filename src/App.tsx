@@ -8,6 +8,7 @@ import Editor from './components/Editor';
 import Guide from './components/Guide';
 import PrintView from './components/PrintView';
 import { api } from './lib/api';
+import { Save, Briefcase } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
@@ -75,7 +76,7 @@ export default function App() {
       {activeSection === 'admin' && <Admin />}
       {activeSection === 'draft' && (
         <div className="simple-page panel">
-          <span className="simple-icon">▣</span>
+          <span className="simple-icon"><Save size={48} color="#94a3b8" /></span>
           <h1>Draft Lokal</h1>
           <p>Draft pembuatan soal Anda tersimpan secara otomatis di browser ini. Anda dapat melanjutkannya dari menu <b>Dashboard</b> atau klik <b>Buat Soal</b>.</p>
           <button className="btn btn-primary" style={{marginTop: '1rem'}} onClick={() => setActiveSection('wizard')}>Buka Draft Terakhir</button>
@@ -84,7 +85,7 @@ export default function App() {
       {activeSection === 'guide' && <Guide onNavigate={setActiveSection} />}
       {activeSection === 'workspace' && (
         <div className="simple-page panel">
-          <span className="simple-icon">◇</span>
+          <span className="simple-icon"><Briefcase size={48} color="#94a3b8" /></span>
           <h1>Ruang Kerja</h1>
           <p>Fitur Ruang Kerja sedang aktif dalam mode Lokal (Browser Storage). Anda dapat mengatur penyimpanan Ruang Kerja pada menu <b>Admin</b> &gt; <b>Konfigurasi</b>.</p>
           <button className="btn btn-secondary" style={{marginTop: '1rem'}} onClick={() => { if(user?.role==='admin') setActiveSection('admin'); else alert('Hubungi Administrator untuk mengubah pengaturan Ruang Kerja.'); }}>Atur Konfigurasi Ruang Kerja</button>

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { buildExternalAiPrompt } from '../lib/promptBuilder';
 import { parseExternalAiJson } from '../lib/jsonParser';
+import { Check, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function Wizard({ settings, subjects, user, onComplete }: { settings: any, subjects: any[], user: any, onComplete: (data: any) => void }) {
   const [step, setStep] = useState(1);
@@ -8,12 +9,14 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
     const saved = localStorage.getItem('wizardDraft');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (!Array.isArray(parsed.learning)) parsed.learning = [parsed.learning || { cp: '', objectives: '' }];
+        return parsed;
       } catch (e) {}
     }
     return {
       identity: { school: user?.school || '', level: 'SD/MI', phase: 'Fase A', grade: '1', semester: 'Ganjil', schoolYear: '2026/2027', subject: '', topic: '', duration: 90 },
-      learning: { cp: '', objectives: '' },
+      learning: [{ cp: '', objectives: '' }],
       counts: { regular: 5, literacy: 5, numeracy: 5 },
       forms: { pilihan_ganda: 5, pilihan_ganda_kompleks: 4, menjodohkan: 2, isian_singkat: 2, uraian: 2 },
       difficulties: { mudah: 5, sedang: 7, sulit: 3 },
@@ -32,6 +35,28 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
   const generatedPrompt = useMemo(() => buildExternalAiPrompt(formData), [formData]);
   const nextStep = () => { if (step < 5) setStep(step + 1); };
   const prevStep = () => { if (step > 1) setStep(step - 1); };
+
+  const handleLearningChange = (index: number, field: "cp" | "objectives", value: string) => {
+    setFormData(prev => {
+      const newLearning = [...prev.learning];
+      newLearning[index] = { ...newLearning[index], [field]: value };
+      return { ...prev, learning: newLearning };
+    });
+  };
+
+  const addLearning = () => {
+    setFormData(prev => ({
+      ...prev,
+      learning: [...prev.learning, { cp: "", objectives: "" }]
+    }));
+  };
+
+  const removeLearning = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      learning: prev.learning.filter((_, i) => i !== index)
+    }));
+  };
 
   const handleChange = (section: keyof typeof formData, field: string, value: any) => {
     setFormData(prev => {
@@ -92,7 +117,7 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
         {[1,2,3,4,5].map(s => (
           <React.Fragment key={s}>
             <button className={`step ${step === s ? 'active' : step > s ? 'done' : ''}`} onClick={() => setStep(s)}>
-              <span>{step > s ? '✓' : s}</span>
+              <span>{step > s ? <Check size={16} strokeWidth={3} /> : s}</span>
               <div><b>Langkah {s}</b></div>
             </button>
             {s < 5 && <i />}
@@ -139,8 +164,16 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
           <div className="wizard-panel">
             <div className="section-heading"><span>02</span><div><h2>Capaian dan Tujuan Pembelajaran</h2></div></div>
             <div className="form-grid one">
-              <label>Capaian Pembelajaran <textarea rows={4} value={formData.learning.cp} onChange={e => handleChange('learning', 'cp', e.target.value)} /></label>
-              <label>Tujuan Pembelajaran <textarea rows={4} value={formData.learning.objectives} onChange={e => handleChange('learning', 'objectives', e.target.value)} /></label>
+              {formData.learning.map((item, index) => (
+                <div key={index} style={{ marginBottom: "1.5rem", padding: "1.5rem", border: "1px solid #e2e8f0", borderRadius: "0.75rem", position: "relative", background: "#fafafa" }}>
+                  {formData.learning.length > 1 && (
+                    <button type="button" onClick={() => removeLearning(index)} style={{ position: "absolute", top: "1rem", right: "1rem", color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>Hapus</button>
+                  )}
+                  <label style={{ display: "block", marginBottom: "1rem" }}>Capaian Pembelajaran (CP) {index + 1} <textarea rows={3} style={{ marginTop: "0.5rem", width: "100%" }} value={item.cp} onChange={e => handleLearningChange(index, "cp", e.target.value)} /></label>
+                  <label style={{ display: "block" }}>Tujuan Pembelajaran (TP) {index + 1} <textarea rows={3} style={{ marginTop: "0.5rem", width: "100%" }} value={item.objectives} onChange={e => handleLearningChange(index, "objectives", e.target.value)} /></label>
+                </div>
+              ))}
+              <button type="button" className="btn btn-secondary" onClick={addLearning} style={{ alignSelf: "flex-start" }}>+ Tambah CP & TP</button>
             </div>
           </div>
         )}
@@ -214,12 +247,18 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
         )}
 
         <div className="wizard-actions">
-          <button type="button" className={`btn btn-secondary ${step === 1 ? 'invisible' : ''}`} onClick={prevStep}>← Sebelumnya</button>
+          <button type="button" className={`btn btn-secondary ${step === 1 ? 'invisible' : ''}`} onClick={prevStep} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <ArrowLeft size={16} /> Sebelumnya
+          </button>
           <span>Draft tersimpan</span>
           {step < 5 ? (
-            <button type="button" className="btn btn-primary" onClick={nextStep}>Selanjutnya →</button>
+            <button type="button" className="btn btn-primary" onClick={nextStep} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              Selanjutnya <ArrowRight size={16} />
+            </button>
           ) : (
-            <button type="button" className="btn btn-primary" onClick={handleFinish}>Selesai ✓</button>
+            <button type="button" className="btn btn-primary" onClick={handleFinish} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              Selesai <Check size={16} />
+            </button>
           )}
         </div>
       </form>

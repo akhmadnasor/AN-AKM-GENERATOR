@@ -1,0 +1,1 @@
+sed -i -e 's/data?.pembelajaran?.capaian_pembelajaran/(Array.isArray(data?.pembelajaran) ? data.pembelajaran.map((p: any) => p.capaian_pembelajaran).join("\\n") : data?.pembelajaran?.capaian_pembelajaran)/g' src/lib/exportDocx.ts
