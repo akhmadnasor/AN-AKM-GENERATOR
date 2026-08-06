@@ -77,6 +77,7 @@ export function buildExternalAiPrompt(data: any) {
       kategori: 'literasi',
       judul: 'Judul stimulus',
       konten: 'Isi stimulus lengkap',
+      gambar: 'Prompt/deskripsi gambar (jika relevan, kosongkan jika tidak ada)',
       data_tabel: null,
       sumber: 'Sumber atau kosong'
     }],
@@ -93,6 +94,7 @@ export function buildExternalAiPrompt(data: any) {
       proses_kognitif: 'Pemahaman dan penerapan',
       konteks: 'Pembelajaran',
       pokok_soal: 'Pertanyaan lengkap',
+      gambar: 'Prompt/deskripsi gambar (jika relevan, kosongkan jika tidak ada)',
       data_tabel: null,
       pilihan_jawaban: sampleOptions,
       kunci_jawaban: ['A'],
@@ -143,6 +145,9 @@ export function buildExternalAiPrompt(data: any) {
       ? (data.identity.level === 'SD/MI'
         ? '18. ATURAN KHUSUS BAHASA INGGRIS (SD/MI): Gunakan instruksi dan teks Bahasa Inggris yang sangat sederhana (basic vocabulary, simple present tense), relevan dengan anak-anak, dan jika perlu berikan gambar/stimulus visual atau terjemahan parsial.'
         : '18. ATURAN KHUSUS BAHASA INGGRIS (SMP/MTs): Gunakan teks fungsional (functional text) atau descriptive/recount text berbahasa Inggris yang sesuai standar SMP, menguji reading comprehension, vocabulary in context, dan inferencing.')
+      : '',
+    data.options.includeImages
+      ? '19. SERTAKAN GAMBAR PADA SOAL: Sisipkan deskripsi prompt gambar yang relevan (seperti [GAMBAR: ...]) pada teks pokok_soal atau stimulus untuk memperkuat komponen AKM dan memperjelas konteks.'
       : '',
     '',
     'INPUT:',

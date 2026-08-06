@@ -17,7 +17,7 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
       counts: { regular: 5, literacy: 5, numeracy: 5 },
       forms: { pilihan_ganda: 5, pilihan_ganda_kompleks: 4, menjodohkan: 2, isian_singkat: 2, uraian: 2 },
       difficulties: { mudah: 5, sedang: 7, sulit: 3 },
-      options: { enableLiteracy: true, enableNumeracy: true, packageMode: 'Tunggal' },
+      options: { enableLiteracy: true, enableNumeracy: true, packageMode: 'Tunggal', includeImages: false },
       author: { name: user?.name || '', role: 'Guru', date: new Date().toISOString().slice(0,10), nip: '', school: user?.school || '', city: '' }
     };
   });
@@ -166,6 +166,12 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
                   <label><span>Uraian</span><input type="number" value={formData.forms.uraian} onChange={e => handleChange('forms', 'uraian', parseInt(e.target.value))} /></label>
                 </div>
               </div>
+            </div>
+            <div style={{ marginTop: '1.5rem' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
+                <input type="checkbox" style={{ width: '1.25rem', height: '1.25rem' }} checked={formData.options.includeImages || false} onChange={e => handleChange('options', 'includeImages', e.target.checked)} />
+                <span style={{ fontSize: '0.9375rem', fontWeight: 500 }}>Sertakan referensi visual (prompt gambar) yang relevan untuk soal-soal Komponen AKM</span>
+              </label>
             </div>
           </div>
         )}

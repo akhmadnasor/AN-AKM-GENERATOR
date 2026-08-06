@@ -68,6 +68,14 @@ export default function Editor({ data, onPrint }: { data: any, onPrint?: () => v
                       <div key={stIdx}>
                         {st.judul && <h4 style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{st.judul}</h4>}
                         {st.konten && <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{st.konten}</p>}
+                        {st.gambar && (
+                          <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
+                            <span style={{ color: '#64748b', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span>📷</span>
+                              <span>[GAMBAR]: {st.gambar}</span>
+                            </span>
+                          </div>
+                        )}
                         {st.data_tabel && (
                           <div style={{ overflowX: 'auto', marginBottom: '0.5rem' }}>
                             <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #cbd5e1' }}>
@@ -96,6 +104,15 @@ export default function Editor({ data, onPrint }: { data: any, onPrint?: () => v
                 )}
 
                 <p style={{ marginBottom: '1rem', whiteSpace: 'pre-wrap' }}>{s.pokok_soal}</p>
+                
+                {s.gambar && (
+                  <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
+                    <span style={{ color: '#64748b', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>📷</span>
+                      <span>[GAMBAR]: {s.gambar}</span>
+                    </span>
+                  </div>
+                )}
                 
                 {s.data_tabel && (
                   <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>

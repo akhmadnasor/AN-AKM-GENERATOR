@@ -47,6 +47,11 @@ export default function PrintView({ data, onBack }: { data: any, onBack: () => v
                     <div key={stIdx} style={{ border: '1px solid #000', padding: '1rem', marginBottom: '0.5rem' }}>
                       {st.judul && <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', margin: '0 0 0.5rem 0', textAlign: 'center' }}>{st.judul}</h3>}
                       {st.konten && <p style={{ margin: 0, whiteSpace: 'pre-wrap', textAlign: 'justify' }}>{st.konten}</p>}
+                      {st.gambar && (
+                        <div style={{ marginTop: '1rem', padding: '2rem 1rem', border: '1px dashed #000', textAlign: 'center' }}>
+                          <span style={{ fontStyle: 'italic' }}>[Ruang Gambar: {st.gambar}]</span>
+                        </div>
+                      )}
                       {st.data_tabel && (
                         <div style={{ overflowX: 'auto', marginTop: '1rem' }}>
                           <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #000' }}>
@@ -80,6 +85,13 @@ export default function PrintView({ data, onBack }: { data: any, onBack: () => v
                 <div style={{ flex: 1 }}>
                   <p style={{ margin: '0 0 1rem 0', whiteSpace: 'pre-wrap', textAlign: 'justify' }}>{s.pokok_soal}</p>
                   
+                  {/* GAMBAR DI SOAL */}
+                  {s.gambar && (
+                    <div style={{ marginBottom: '1rem', padding: '2rem 1rem', border: '1px dashed #000', textAlign: 'center' }}>
+                      <span style={{ fontStyle: 'italic' }}>[Ruang Gambar: {s.gambar}]</span>
+                    </div>
+                  )}
+
                   {/* TABEL DI SOAL */}
                   {s.data_tabel && (
                     <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>

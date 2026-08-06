@@ -52,6 +52,9 @@ function renderRumusanSoal(s: any, data: any) {
       if (stimulus.konten) {
         p.push(new Paragraph({ text: stimulus.konten, spacing: { after: 100 } }));
       }
+      if (stimulus.gambar) {
+        p.push(new Paragraph({ text: `[GAMBAR: ${stimulus.gambar}]`, spacing: { after: 100 }, alignment: AlignmentType.CENTER }));
+      }
       if (stimulus.data_tabel) {
         p.push(createDocxTable(stimulus.data_tabel));
         p.push(new Paragraph({ text: "", spacing: { after: 100 } }));
@@ -60,6 +63,9 @@ function renderRumusanSoal(s: any, data: any) {
   }
 
   p.push(new Paragraph({ text: s.pokok_soal || '', spacing: { after: 100 } }));
+  if (s.gambar) {
+    p.push(new Paragraph({ text: `[GAMBAR: ${s.gambar}]`, spacing: { after: 100 }, alignment: AlignmentType.CENTER }));
+  }
   if (s.data_tabel) {
     p.push(createDocxTable(s.data_tabel));
     p.push(new Paragraph({ text: "", spacing: { after: 100 } }));
@@ -155,7 +161,7 @@ export async function exportToDocx(data: any) {
                 rowSpan: 2,
                 width: { size: 40, type: WidthType.PERCENTAGE },
                 children: [
-                  new Paragraph({ children: [new TextRun({ text: "Kompetensi Dasar:", bold: true })] }),
+                  new Paragraph({ children: [new TextRun({ text: "Capaian Pembelajaran:", bold: true })] }),
                   new Paragraph({ text: data?.pembelajaran?.capaian_pembelajaran || '-' }),
                 ],
                 margins: { top: 100, bottom: 100, left: 100, right: 100 }
@@ -217,7 +223,7 @@ export async function exportToDocx(data: any) {
               new TableCell({
                 width: { size: 40, type: WidthType.PERCENTAGE },
                 children: [
-                  new Paragraph({ children: [new TextRun({ text: "Indikator Soal:", bold: true })] }),
+                  new Paragraph({ children: [new TextRun({ text: "Tujuan Pembelajaran:", bold: true })] }),
                   new Paragraph({ text: s.indikator || '-' }),
                 ],
                 margins: { top: 100, bottom: 100, left: 100, right: 100 }
