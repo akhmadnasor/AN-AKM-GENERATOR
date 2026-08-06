@@ -10,6 +10,36 @@ const noBorder = {
   insideVertical: { style: BorderStyle.NONE, size: 0, color: "auto" },
 };
 
+function createDocxTable(data_tabel: any) {
+  if (!data_tabel || !data_tabel.judul_kolom || !data_tabel.baris) {
+    return new Paragraph({ text: "" });
+  }
+
+  return new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    rows: [
+      new TableRow({
+        children: data_tabel.judul_kolom.map((col: string) => 
+          new TableCell({
+            children: [new Paragraph({ children: [new TextRun({ text: col, bold: true })] })],
+            margins: { top: 100, bottom: 100, left: 100, right: 100 }
+          })
+        )
+      }),
+      ...data_tabel.baris.map((row: string[]) => 
+        new TableRow({
+          children: row.map((cell: string) => 
+            new TableCell({
+              children: [new Paragraph({ text: cell })],
+              margins: { top: 100, bottom: 100, left: 100, right: 100 }
+            })
+          )
+        })
+      )
+    ]
+  });
+}
+
 function renderRumusanSoal(s: any, data: any) {
   const p: any[] = [];
   
@@ -20,12 +50,20 @@ function renderRumusanSoal(s: any, data: any) {
         p.push(new Paragraph({ children: [new TextRun({ text: stimulus.judul, bold: true })], spacing: { after: 100 } }));
       }
       if (stimulus.konten) {
-        p.push(new Paragraph({ text: stimulus.konten, spacing: { after: 200 } }));
+        p.push(new Paragraph({ text: stimulus.konten, spacing: { after: 100 } }));
+      }
+      if (stimulus.data_tabel) {
+        p.push(createDocxTable(stimulus.data_tabel));
+        p.push(new Paragraph({ text: "", spacing: { after: 100 } }));
       }
     }
   }
 
-  p.push(new Paragraph({ text: s.pokok_soal || '', spacing: { after: 200 } }));
+  p.push(new Paragraph({ text: s.pokok_soal || '', spacing: { after: 100 } }));
+  if (s.data_tabel) {
+    p.push(createDocxTable(s.data_tabel));
+    p.push(new Paragraph({ text: "", spacing: { after: 100 } }));
+  }
 
   if (s.pilihan_jawaban && s.pilihan_jawaban.length > 0) {
     s.pilihan_jawaban.forEach((pj: any, idx: number) => {

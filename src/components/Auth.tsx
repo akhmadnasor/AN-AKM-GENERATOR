@@ -76,10 +76,17 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
             <label>Username
               <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Masukkan username" required autoComplete="username" />
             </label>
-            <label>Password
+            <label>Kata Sandi
               <div className="password-wrap">
-                <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Masukkan password" required autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
-                <button type="button" className="password-toggle flex items-center justify-center" onClick={() => setShowPassword(!showPassword)} aria-label="Tampilkan password">
+                <input 
+                  type="text" 
+                  style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' }}
+                  value={password} 
+                  onChange={e => setPassword(e.target.value)} 
+                  placeholder="Masukkan kata sandi" 
+                  required 
+                />
+                <button type="button" className="password-toggle flex items-center justify-center" onClick={() => setShowPassword(!showPassword)} aria-label="Tampilkan sandi">
                   {showPassword ? <span style={{fontSize: '18px'}}>👁️‍🗨️</span> : <span style={{fontSize: '18px'}}>👁️</span>}
                 </button>
               </div>

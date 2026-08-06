@@ -674,3 +674,27 @@ input[readonly] { color: var(--primary); background: #F2F7FE; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+@media print {
+  .app-shell .sidebar, 
+  .app-shell .topbar, 
+  .app-shell .mobile-nav,
+  .no-print {
+    display: none !important;
+  }
+  .app-shell {
+    display: block !important;
+  }
+  .app-shell .content-area {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  body {
+    background-color: white !important;
+  }
+  .print-view-container {
+    padding: 0 !important;
+  }
+}

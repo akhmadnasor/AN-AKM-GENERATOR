@@ -6,6 +6,7 @@ import Wizard from './components/Wizard';
 import Admin from './components/Admin';
 import Editor from './components/Editor';
 import Guide from './components/Guide';
+import PrintView from './components/PrintView';
 import { api } from './lib/api';
 
 export default function App() {
@@ -89,7 +90,8 @@ export default function App() {
           <button className="btn btn-secondary" style={{marginTop: '1rem'}} onClick={() => { if(user?.role==='admin') setActiveSection('admin'); else alert('Hubungi Administrator untuk mengubah pengaturan Ruang Kerja.'); }}>Atur Konfigurasi Ruang Kerja</button>
         </div>
       )}
-      {activeSection === 'editor' && <Editor data={generatedData} />}
+      {activeSection === 'editor' && <Editor data={generatedData} onPrint={() => setActiveSection('print')} />}
+      {activeSection === 'print' && <PrintView data={generatedData} onBack={() => setActiveSection('editor')} />}
     </Shell>
   );
 }
