@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 import { api } from '../lib/api';
 
 export default function Auth({ onLogin, settings }: { onLogin: (data: any) => void, settings: any }) {
@@ -81,7 +80,7 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
               <div className="password-wrap">
                 <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Masukkan password" required />
                 <button type="button" className="password-toggle flex items-center justify-center" onClick={() => setShowPassword(!showPassword)} aria-label="Tampilkan password">
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <span style={{fontSize: '18px'}}>👁️‍🗨️</span> : <span style={{fontSize: '18px'}}>👁️</span>}
                 </button>
               </div>
             </label>

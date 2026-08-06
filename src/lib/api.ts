@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import CryptoJS from "crypto-js";
 
 const supabaseUrl = "https://noucigpwwodytsbkezwz.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vdWNpZ3B3d29keXRzYmtlend6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MDk0MTUsImV4cCI6MjEwMTA4NTQxNX0.MXmqs-Xtj7kRUtP2zN-ZQ_rs2se5J4cF6fVO2B3r2yI";
@@ -26,30 +27,34 @@ let settings = {
 export const api = {
   async login(credentials: any) {
     const { username, password } = credentials;
+    const password_hash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+
     const { data: user, error } = await supabase
       .from('guru')
       .select('*')
       .ilike('username', username)
-      .eq('password', password)
+      .eq('password_hash', password_hash)
       .maybeSingle();
 
     if (error || !user) throw new Error("Username atau password tidak sesuai.");
-    if (user.status && user.status !== "Aktif") throw new Error("Akun ini telah dinonaktifkan.");
+    if (user.status && user.status !== "ACTIVE" && user.status !== "Aktif") throw new Error("Akun ini telah dinonaktifkan.");
 
     return {
       token: user.id,
       user: { 
         id: user.id, 
-        name: user.name || user.nama, 
+        name: user.nama_guru || user.name || user.nama, 
         username: user.username, 
-        role: user.role || 'user' 
+        role: user.role === 'ADMIN' ? 'admin' : 'user' 
       },
-      requirePasswordChange: user.passwordStatus === "Awal",
+      requirePasswordChange: false,
     };
   },
 
   async register(userData: any) {
     const { name, username, password } = userData;
+    const password_hash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+
     const { data: existingUser } = await supabase
       .from('guru')
       .select('id')
@@ -59,14 +64,12 @@ export const api = {
     if (existingUser) throw new Error("Username sudah digunakan.");
 
     const { error } = await supabase.from('guru').insert([{
-      nama: name,
-      name: name,
+      nama_guru: name,
       username,
-      password,
-      role: "user",
-      status: "Aktif",
-      passwordStatus: "Sudah diubah",
-      createdAt: new Date().toISOString()
+      password_hash,
+      role: "TEACHER",
+      status: "ACTIVE",
+      created_at: new Date().toISOString()
     }]);
 
     if (error) throw new Error("Gagal mendaftar pengguna baru.");
@@ -74,7 +77,10 @@ export const api = {
   },
 
   async getBootstrap() {
-    const token = localStorage.getItem("token");
+    let token = null;
+    try {
+      token = localStorage.getItem("token");
+    } catch(e) {}
     if (!token) throw new Error("Sesi tidak valid.");
 
     const { data: user, error } = await supabase
@@ -88,9 +94,9 @@ export const api = {
     return {
       user: { 
         id: user.id, 
-        name: user.name || user.nama, 
+        name: user.nama_guru || user.name || user.nama, 
         username: user.username, 
-        role: user.role || 'user' 
+        role: user.role === 'ADMIN' ? 'admin' : 'user' 
       },
       settings,
       subjects: subjects.filter((s) => s.status === "Aktif"),
@@ -104,12 +110,12 @@ export const api = {
     return {
       users: (users || []).map((u: any) => ({
         id: u.id,
-        name: u.name || u.nama,
+        name: u.nama_guru || u.name || u.nama,
         username: u.username,
-        role: u.role || 'user',
-        status: u.status || 'Aktif',
-        passwordStatus: u.passwordStatus || 'Sudah diubah',
-        createdAt: u.createdAt || u.created_at || new Date().toISOString()
+        role: u.role === 'ADMIN' ? 'admin' : 'user',
+        status: u.status === 'ACTIVE' ? 'Aktif' : (u.status || 'Aktif'),
+        passwordStatus: 'Sudah diubah',
+        createdAt: u.created_at || u.createdAt || new Date().toISOString()
       })),
       settings,
       subjects,

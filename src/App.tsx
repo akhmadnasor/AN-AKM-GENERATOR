@@ -14,7 +14,13 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    let token = null;
+    try {
+      token = localStorage.getItem('token');
+    } catch (err) {
+      console.warn("Storage access restricted", err);
+    }
+
     if (token) {
       api.getBootstrap()
         .then(res => {
@@ -23,7 +29,7 @@ export default function App() {
           setSubjects(res.subjects);
         })
         .catch(() => {
-          localStorage.removeItem('token');
+          try { localStorage.removeItem('token'); } catch (e) {}
         })
         .finally(() => setLoading(false));
     } else {
@@ -32,7 +38,7 @@ export default function App() {
   }, []);
 
   const handleLogin = async (data: any) => {
-    localStorage.setItem('token', data.token);
+    try { localStorage.setItem('token', data.token); } catch(e) {}
     setUser(data.user);
     try {
       const res = await api.getBootstrap();
@@ -42,7 +48,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    try { localStorage.removeItem('token'); } catch(e) {}
     setUser(null);
   };
 
