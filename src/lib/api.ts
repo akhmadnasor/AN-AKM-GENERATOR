@@ -6,11 +6,29 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const subjects = [
-  { id: "MAP-SD-01", level: "SD/MI", name: "Bahasa Indonesia", status: "Aktif", order: 1 },
-  { id: "MAP-SD-02", level: "SD/MI", name: "Matematika", status: "Aktif", order: 2 },
-  { id: "MAP-SD-03", level: "SD/MI", name: "IPAS", status: "Aktif", order: 3 },
-  { id: "MAP-SMP-01", level: "SMP/MTs", name: "Bahasa Indonesia", status: "Aktif", order: 1 },
-  { id: "MAP-SMP-02", level: "SMP/MTs", name: "Matematika", status: "Aktif", order: 2 },
+  { id: "MAP-SD-01", level: "SD/MI", name: "Pendidikan Agama dan Budi Pekerti", status: "Aktif", order: 1 },
+  { id: "MAP-SD-02", level: "SD/MI", name: "Pendidikan Pancasila / PKn", status: "Aktif", order: 2 },
+  { id: "MAP-SD-03", level: "SD/MI", name: "Bahasa Indonesia", status: "Aktif", order: 3 },
+  { id: "MAP-SD-04", level: "SD/MI", name: "Matematika", status: "Aktif", order: 4 },
+  { id: "MAP-SD-05", level: "SD/MI", name: "Ilmu Pengetahuan Alam dan Sosial (IPAS)", status: "Aktif", order: 5 },
+  { id: "MAP-SD-06", level: "SD/MI", name: "Pendidikan Jasmani, Olahraga, dan Kesehatan", status: "Aktif", order: 6 },
+  { id: "MAP-SD-07", level: "SD/MI", name: "Seni Budaya dan Prakarya", status: "Aktif", order: 7 },
+  { id: "MAP-SD-08", level: "SD/MI", name: "Bahasa Inggris", status: "Aktif", order: 8 },
+  { id: "MAP-SD-09", level: "SD/MI", name: "Muatan Lokal", status: "Aktif", order: 9 },
+
+  { id: "MAP-SMP-01", level: "SMP/MTs", name: "Pendidikan Agama dan Budi Pekerti", status: "Aktif", order: 1 },
+  { id: "MAP-SMP-02", level: "SMP/MTs", name: "Pendidikan Agama Islam", status: "Aktif", order: 2 },
+  { id: "MAP-SMP-03", level: "SMP/MTs", name: "Pendidikan Pancasila / PKn", status: "Aktif", order: 3 },
+  { id: "MAP-SMP-04", level: "SMP/MTs", name: "Bahasa Indonesia", status: "Aktif", order: 4 },
+  { id: "MAP-SMP-05", level: "SMP/MTs", name: "Matematika", status: "Aktif", order: 5 },
+  { id: "MAP-SMP-06", level: "SMP/MTs", name: "Ilmu Pengetahuan Alam (IPA)", status: "Aktif", order: 6 },
+  { id: "MAP-SMP-07", level: "SMP/MTs", name: "Ilmu Pengetahuan Sosial (IPS)", status: "Aktif", order: 7 },
+  { id: "MAP-SMP-08", level: "SMP/MTs", name: "Bahasa Inggris", status: "Aktif", order: 8 },
+  { id: "MAP-SMP-09", level: "SMP/MTs", name: "Pendidikan Jasmani, Olahraga, dan Kesehatan", status: "Aktif", order: 9 },
+  { id: "MAP-SMP-10", level: "SMP/MTs", name: "Informatika", status: "Aktif", order: 10 },
+  { id: "MAP-SMP-11", level: "SMP/MTs", name: "Seni Budaya", status: "Aktif", order: 11 },
+  { id: "MAP-SMP-12", level: "SMP/MTs", name: "Prakarya", status: "Aktif", order: 12 },
+  { id: "MAP-SMP-13", level: "SMP/MTs", name: "Muatan Lokal", status: "Aktif", order: 13 },
 ];
 
 let settings = {

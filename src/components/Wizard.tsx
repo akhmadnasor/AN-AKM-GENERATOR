@@ -177,9 +177,9 @@ export default function Wizard({ settings, subjects, user, onComplete }: { setti
               <div>
                 <h3 className="mini-title">Kesulitan</h3>
                 <div className="difficulty-cards">
-                  <label><b>Mudah</b><input type="number" value={formData.difficulties.mudah} onChange={e => handleChange('difficulties', 'mudah', parseInt(e.target.value))} /></label>
-                  <label><b>Sedang</b><input type="number" value={formData.difficulties.sedang} onChange={e => handleChange('difficulties', 'sedang', parseInt(e.target.value))} /></label>
-                  <label><b>Sulit</b><input type="number" value={formData.difficulties.sulit} onChange={e => handleChange('difficulties', 'sulit', parseInt(e.target.value))} /></label>
+                  <label><div className="difficulty-dot easy"></div><div><b>Mudah</b></div><input type="number" value={formData.difficulties.mudah} onChange={e => handleChange('difficulties', 'mudah', parseInt(e.target.value))} /></label>
+                  <label><div className="difficulty-dot medium"></div><div><b>Sedang</b></div><input type="number" value={formData.difficulties.sedang} onChange={e => handleChange('difficulties', 'sedang', parseInt(e.target.value))} /></label>
+                  <label><div className="difficulty-dot hard"></div><div><b>Sulit</b></div><input type="number" value={formData.difficulties.sulit} onChange={e => handleChange('difficulties', 'sulit', parseInt(e.target.value))} /></label>
                 </div>
               </div>
             </div>

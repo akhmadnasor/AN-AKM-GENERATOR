@@ -74,11 +74,11 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
               </label>
             )}
             <label>Username
-              <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Masukkan username" required />
+              <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Masukkan username" required autoComplete="username" />
             </label>
             <label>Password
               <div className="password-wrap">
-                <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Masukkan password" required />
+                <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Masukkan password" required autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
                 <button type="button" className="password-toggle flex items-center justify-center" onClick={() => setShowPassword(!showPassword)} aria-label="Tampilkan password">
                   {showPassword ? <span style={{fontSize: '18px'}}>👁️‍🗨️</span> : <span style={{fontSize: '18px'}}>👁️</span>}
                 </button>

@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Dashboard({ user, onNavigate }: { user: any, onNavigate: (s: string) => void }) {
   const firstName = user?.name?.split(' ')[0] || 'Pengguna';
+  const [hasDraft, setHasDraft] = useState(false);
+  const [draftInfo, setDraftInfo] = useState<any>(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('wizardDraft');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setHasDraft(true);
+        setDraftInfo(parsed);
+      }
+    } catch (e) {}
+  }, []);
 
   return (
     <section className="page-section">
@@ -43,9 +56,23 @@ export default function Dashboard({ user, onNavigate }: { user: any, onNavigate:
           <div className="panel-head">
             <div><h3>Draft Terakhir</h3><p>Disimpan di perangkat</p></div><span className="local-badge">Lokal</span>
           </div>
-          <div className="empty-state">
-            <span>▤</span><strong>Belum ada draft</strong><p>Isian wizard akan disimpan otomatis.</p>
-          </div>
+          {hasDraft && draftInfo ? (
+            <div className="draft-active-state" style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <strong style={{ display: 'block', fontSize: '1.125rem' }}>{draftInfo.identity?.subject || 'Mata Pelajaran Belum Dipilih'}</strong>
+                <span style={{ color: '#64748b', fontSize: '0.875rem' }}>{draftInfo.identity?.level} - {draftInfo.identity?.phase} Kelas {draftInfo.identity?.grade}</span>
+              </div>
+              <p style={{ fontSize: '0.875rem', marginBottom: '1.25rem' }}>
+                Materi: {draftInfo.identity?.topic || '-'}<br />
+                Penyusun: {draftInfo.author?.name || '-'}
+              </p>
+              <button className="btn btn-secondary btn-small" onClick={() => onNavigate('wizard')}>Lanjutkan Draft <b>→</b></button>
+            </div>
+          ) : (
+            <div className="empty-state">
+              <span>▤</span><strong>Belum ada draft</strong><p>Isian wizard akan disimpan otomatis.</p>
+            </div>
+          )}
         </article>
       </div>
     </section>

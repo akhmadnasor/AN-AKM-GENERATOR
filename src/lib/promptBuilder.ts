@@ -116,18 +116,34 @@ export function buildExternalAiPrompt(data: any) {
     '1. Gunakan Bahasa Indonesia yang jelas, sesuai jenjang, dan bebas data pribadi murid.',
     '2. Jumlah soal harus tepat ' + total + ' butir.',
     '3. Komposisi kategori, bentuk soal, dan tingkat kesulitan harus persis mengikuti INPUT.',
-    '4. Soal literasi dan numerasi harus memakai stimulus yang relevan; stimulus_id harus merujuk ke stimulus yang tersedia.',
-    '5. Fase A wajib memiliki tepat 3 opsi untuk pilihan ganda dan pilihan ganda kompleks; Fase B, C, dan D wajib memiliki tepat 4 opsi. Dokumen ini menggunakan ' + (data.identity.phase || 'Fase -') + ', sehingga setiap butir pilihan wajib memiliki tepat ' + optionCount + ' opsi.',
-    '6. Pilihan ganda memiliki satu kunci; pilihan ganda kompleks boleh memiliki lebih dari satu kunci.',
-    '7. Menjodohkan memakai minimal dua objek pilihan_jawaban. Setiap objek memuat kode, kiri, kanan, dan teks "bagian kiri — bagian kanan"; kunci_jawaban berisi pasangan seperti "1=C".',
-    '8. Jika stimulus atau pokok soal memerlukan tabel, gunakan data_tabel: {"judul_kolom": [...], "baris": [[...]]}. Jangan menulis tabel dengan spasi atau tanda pipa Markdown.',
-    '9. Isian singkat dan uraian memakai pilihan_jawaban: [], kunci_jawaban: [], serta jawaban_singkat berisi jawaban acuan.',
-    '10. Semua soal harus memiliki soal_id unik, nomor berurutan, materi, indikator, domain_atau_konten, proses_kognitif, konteks, pokok_soal, pembahasan, skor, dan pedoman_penskoran.',
-    '11. domain_atau_konten, proses_kognitif, dan konteks harus mengikuti konfigurasi_akm pada INPUT; gunakan nilai default INPUT jika butir tidak memberikan nilai khusus.',
-    '12. Khusus uraian, pedoman_penskoran wajib memuat skor_maksimal dan minimal dua kriteria skor.',
-    '13. Jangan mengeluarkan Markdown, blok kode, komentar, penjelasan, atau kode Python.',
-    '14. Keluarkan SATU objek JSON valid yang dapat langsung disimpan sebagai berkas .json.',
-    '15. Gunakan nama field dan struktur keluaran persis seperti CONTOH STRUKTUR.',
+    '4. Soal literasi dan numerasi harus memakai stimulus yang relevan; stimulus_id merujuk ke stimulus yang tersedia.',
+    '5. Karakteristik Soal LITERASI (sesuai jenjang ' + data.identity.level + ' ' + data.identity.phase + '):',
+    data.identity.level === 'SD/MI'
+      ? '   - Gunakan teks informasi atau sastra yang dekat dengan keseharian anak, panjang teks pendek-sedang, bahasa yang mudah dipahami, fokus pada menemukan informasi, pemahaman dasar, dan inferensi sederhana.'
+      : '   - Gunakan teks informasi, artikel, atau sastra yang lebih kompleks, melibatkan analisis, evaluasi mendalam, dan refleksi dari teks.',
+    '6. Karakteristik Soal NUMERASI (sesuai jenjang ' + data.identity.level + ' ' + data.identity.phase + '):',
+    data.identity.level === 'SD/MI'
+      ? '   - Gunakan konteks personal atau sosial budaya yang sederhana, fokus pada konsep bilangan, operasi dasar, geometri dasar, atau data sederhana yang relevan dengan usia anak.'
+      : '   - Gunakan konteks saintifik, sosial, atau pekerjaan dasar, melibatkan penalaran tingkat lanjut, aljabar, pengolahan data, dan penerapan matematika dalam kehidupan sehari-hari.',
+    '7. Fase A wajib memiliki tepat 3 opsi untuk pilihan ganda dan pilihan ganda kompleks; Fase B, C, dan D wajib memiliki tepat 4 opsi. Dokumen ini menggunakan ' + (data.identity.phase || 'Fase -') + ', sehingga setiap butir pilihan wajib memiliki tepat ' + optionCount + ' opsi.',
+    '8. Pilihan ganda memiliki satu kunci; pilihan ganda kompleks boleh memiliki lebih dari satu kunci.',
+    '9. Menjodohkan memakai minimal dua objek pilihan_jawaban. Setiap objek memuat kode, kiri, kanan, dan teks "bagian kiri — bagian kanan"; kunci_jawaban berisi pasangan seperti "1=C".',
+    '10. Jika stimulus atau pokok soal memerlukan tabel, gunakan data_tabel: {"judul_kolom": [...], "baris": [[...]]}. Jangan menulis tabel dengan spasi atau tanda pipa Markdown.',
+    '11. Isian singkat dan uraian memakai pilihan_jawaban: [], kunci_jawaban: [], serta jawaban_singkat berisi jawaban acuan.',
+    '12. Semua soal harus memiliki soal_id unik, nomor berurutan, materi, indikator, domain_atau_konten, proses_kognitif, konteks, pokok_soal, pembahasan, skor, dan pedoman_penskoran.',
+    '13. domain_atau_konten, proses_kognitif, dan konteks harus mengikuti konfigurasi_akm pada INPUT; gunakan nilai default INPUT jika butir tidak memberikan nilai khusus.',
+    '14. Khusus uraian, pedoman_penskoran wajib memuat skor_maksimal dan minimal dua kriteria skor.',
+    '15. Jangan mengeluarkan Markdown, blok kode, komentar, penjelasan, atau kode Python.',
+    '16. Keluarkan SATU objek JSON valid yang dapat langsung disimpan sebagai berkas .json.',
+    '17. Gunakan nama field dan struktur keluaran persis seperti CONTOH STRUKTUR.',
+    data.identity.subject?.toLowerCase().includes('agama') || data.identity.subject?.toLowerCase().includes('quran') || data.identity.subject?.toLowerCase().includes('hadis')
+      ? '18. ATURAN KHUSUS PAI/AGAMA: Untuk penulisan ayat Al-Qur\'an dan Hadits, gunakan teks/font Bahasa Arab sesuai kaidah penulisan (Rasm Usmani) yang baik dan benar, beserta harakatnya.'
+      : '',
+    data.identity.subject?.toLowerCase().includes('inggris')
+      ? (data.identity.level === 'SD/MI'
+        ? '18. ATURAN KHUSUS BAHASA INGGRIS (SD/MI): Gunakan instruksi dan teks Bahasa Inggris yang sangat sederhana (basic vocabulary, simple present tense), relevan dengan anak-anak, dan jika perlu berikan gambar/stimulus visual atau terjemahan parsial.'
+        : '18. ATURAN KHUSUS BAHASA INGGRIS (SMP/MTs): Gunakan teks fungsional (functional text) atau descriptive/recount text berbahasa Inggris yang sesuai standar SMP, menguji reading comprehension, vocabulary in context, dan inferencing.')
+      : '',
     '',
     'INPUT:',
     JSON.stringify(request, null, 2),
@@ -135,6 +151,6 @@ export function buildExternalAiPrompt(data: any) {
     'CONTOH STRUKTUR KELUARAN (ganti contoh dengan seluruh soal yang diminta):',
     JSON.stringify(outputShape, null, 2),
     '',
-    'Periksa kembali jumlah butir, distribusi, referensi stimulus, serta kunci jawaban sebelum mengirim JSON.'
-  ].join('\n');
+    'Periksa kembali jumlah butir, distribusi, perbedaan tingkat kompleksitas antara literasi dan numerasi berdasarkan jenjang (' + data.identity.level + '), referensi stimulus, serta kunci jawaban sebelum mengirim JSON.'
+  ].filter(Boolean).join('\n');
 }

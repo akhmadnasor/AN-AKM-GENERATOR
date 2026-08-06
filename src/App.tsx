@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Wizard from './components/Wizard';
 import Admin from './components/Admin';
 import Editor from './components/Editor';
+import Guide from './components/Guide';
 import { api } from './lib/api';
 
 export default function App() {
@@ -75,21 +76,17 @@ export default function App() {
         <div className="simple-page panel">
           <span className="simple-icon">▣</span>
           <h1>Draft Lokal</h1>
-          <p>Fitur tersedia di versi lengkap.</p>
+          <p>Draft pembuatan soal Anda tersimpan secara otomatis di browser ini. Anda dapat melanjutkannya dari menu <b>Dashboard</b> atau klik <b>Buat Soal</b>.</p>
+          <button className="btn btn-primary" style={{marginTop: '1rem'}} onClick={() => setActiveSection('wizard')}>Buka Draft Terakhir</button>
         </div>
       )}
-      {activeSection === 'guide' && (
-        <div className="simple-page panel guide-content">
-          <span className="simple-icon">?</span>
-          <h1>Panduan Singkat</h1>
-          <p>Silakan ikuti instruksi pada wizard untuk membuat soal.</p>
-        </div>
-      )}
+      {activeSection === 'guide' && <Guide onNavigate={setActiveSection} />}
       {activeSection === 'workspace' && (
         <div className="simple-page panel">
           <span className="simple-icon">◇</span>
           <h1>Ruang Kerja</h1>
-          <p>Modul bank stimulus dan kualitas belum terhubung di preview ini.</p>
+          <p>Fitur Ruang Kerja sedang aktif dalam mode Lokal (Browser Storage). Anda dapat mengatur penyimpanan Ruang Kerja pada menu <b>Admin</b> &gt; <b>Konfigurasi</b>.</p>
+          <button className="btn btn-secondary" style={{marginTop: '1rem'}} onClick={() => { if(user?.role==='admin') setActiveSection('admin'); else alert('Hubungi Administrator untuk mengubah pengaturan Ruang Kerja.'); }}>Atur Konfigurasi Ruang Kerja</button>
         </div>
       )}
       {activeSection === 'editor' && <Editor data={generatedData} />}
