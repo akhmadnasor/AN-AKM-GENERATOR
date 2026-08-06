@@ -51,7 +51,7 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
     <main className="auth-page">
       <section className="auth-visual">
         <div className="auth-brand">
-          <div className="brand-shield"><Shield size={24} /></div>
+          <img src="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" alt="Logo" style={{ width: 44, height: 44, borderRadius: 12, marginRight: 12, objectFit: "contain", background: "white", padding: 4 }} />
           <div>
             <strong>{settings?.appName || "AN/AKM Soal Generator"}</strong>
             <span>{settings?.tagline || "Soal Bermutu, Pembelajaran Maju"}</span>
@@ -119,12 +119,12 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
             </div>
             
             <div className="auth-icon-header">
-              <ShieldCheck size={40} className="text-blue-500" />
+              <img src="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" alt="Logo" style={{ width: 48, height: 48, objectFit: "contain" }} />
             </div>
             
-            <div className="form-heading text-center block">
-              <h2>{mode === 'login' ? 'Selamat Datang' : 'Buat Akun'}</h2>
-              <p>{mode === 'login' ? 'Masuk untuk mulai menyusun soal.' : 'Hanya nama pengguna yang menjadi data profil.'}</p>
+            <div className="flex flex-col items-center justify-center text-center w-full mb-8">
+              <h2 className="glowing-text text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 tracking-tight" style={{ lineHeight: 1.2 }}>{mode === 'login' ? 'Selamat Datang' : 'Buat Akun'}</h2>
+              <p className="text-sm sm:text-base text-slate-500 max-w-sm">{mode === 'login' ? 'Masuk untuk mulai menyusun soal.' : 'Hanya nama pengguna yang menjadi data profil.'}</p>
             </div>
 
             <form className="auth-form" onSubmit={handleSubmit}>

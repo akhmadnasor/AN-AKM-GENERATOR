@@ -1,0 +1,2 @@
+sed -i 's|<div className="brand-shield"><Shield size={24} /></div>|<img src="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" alt="Logo" style={{ width: 44, height: 44, borderRadius: 12, marginRight: 12, objectFit: "contain", background: "white", padding: 4 }} />|g' src/components/Auth.tsx
+sed -i 's|<ShieldCheck size={40} className="text-blue-500" />|<img src="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" alt="Logo" style={{ width: 48, height: 48, objectFit: "contain" }} />|g' src/components/Auth.tsx

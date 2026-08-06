@@ -56,7 +56,7 @@ export default function Shell({ user, settings, onLogout, children, activeSectio
     <div className="app-shell">
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <img src={settings?.logoUrl || "https://upload.wikimedia.org/wikipedia/commons/9/9a/Lambang_Kabupaten_Pasuruan.png"} alt="Logo" />
+          <img src={settings?.logoUrl || "https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk"} alt="Logo" />
           <div><strong>{settings?.appName || "AN/AKM"}</strong><span>Soal Generator</span></div>
         </div>
         <nav className="side-nav">

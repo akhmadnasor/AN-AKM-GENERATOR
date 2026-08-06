@@ -1,0 +1,1 @@
+sed -i 's|<title>My Google AI Studio App</title>|<title>Akhmad Nasor • Versi Pro</title>\n    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" />|g' index.html
