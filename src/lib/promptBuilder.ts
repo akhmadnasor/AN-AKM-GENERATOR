@@ -147,7 +147,7 @@ export function buildExternalAiPrompt(data: any) {
         : '18. ATURAN KHUSUS BAHASA INGGRIS (SMP/MTs): Gunakan teks fungsional (functional text) atau descriptive/recount text berbahasa Inggris yang sesuai standar SMP, menguji reading comprehension, vocabulary in context, dan inferencing.')
       : '',
     data.options.includeImages
-      ? '19. SERTAKAN GAMBAR PADA SOAL: Sisipkan deskripsi prompt gambar yang relevan (seperti [GAMBAR: ...]) pada teks pokok_soal atau stimulus untuk memperkuat komponen AKM dan memperjelas konteks.'
+      ? '19. SERTAKAN GAMBAR PADA SOAL: Sisipkan deskripsi prompt gambar yang relevan (seperti [GAMBAR: ...]) pada teks pokok_soal atau stimulus. Prompt gambar harus berupa teks instruksi visual ilustrasi hitam putih sederhana ukuran 512x512. Jika gambar berhubungan dengan data tabel, sertakan penjelasan data tabel tersebut di dalam prompt agar relevan.'
       : '',
     '',
     'INPUT:',

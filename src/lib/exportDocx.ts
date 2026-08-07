@@ -126,7 +126,7 @@ export async function exportToDocx(data: any) {
               new TableCell({
                 width: { size: 60, type: WidthType.PERCENTAGE },
                 children: [
-                  new Paragraph(`Satuan Pendidikan\t: ${data?.identitas?.nama_satuan_pendidikan || '-'}`),
+                  new Paragraph(`Sekolah\t\t: ${data?.identitas?.nama_satuan_pendidikan || '-'}`),
                   new Paragraph(`Mata Pelajaran\t: ${data?.identitas?.mata_pelajaran || '-'}`),
                   new Paragraph(`Kelas/Semester\t: ${data?.identitas?.kelas || '-'} / ${data?.identitas?.semester || '-'}`),
                 ]
