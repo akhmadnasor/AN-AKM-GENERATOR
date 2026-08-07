@@ -1,4 +1,4 @@
-import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle, WidthType, AlignmentType } from 'docx';
+import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle, WidthType, AlignmentType, PageBreak } from 'docx';
 import { saveAs } from 'file-saver';
 
 const noBorder = {
@@ -40,10 +40,10 @@ function createDocxTable(data_tabel: any) {
   });
 }
 
-function renderRumusanSoal(s: any, data: any) {
+function renderRumusanSoal(s: any, data: any, skipStimulus: boolean = false) {
   const p: any[] = [];
   
-  if (s.stimulus_id && data?.stimulus) {
+  if (!skipStimulus && s.stimulus_id && data?.stimulus) {
     const stimulus = data.stimulus.find((st: any) => st.stimulus_id === s.stimulus_id);
     if (stimulus) {
       if (stimulus.judul) {
@@ -233,9 +233,73 @@ export async function exportToDocx(data: any) {
         ]
       });
 
+
       children.push(cardTable);
       children.push(new Paragraph({ text: "", spacing: { after: 400 } }));
     });
+
+    // LEMBAR SOAL SECTION
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    children.push(new Paragraph({
+      alignment: AlignmentType.CENTER,
+      children: [new TextRun({ text: "LEMBAR SOAL", bold: true, size: 28 })],
+      spacing: { after: 400 }
+    }));
+    
+    let lastStimulusId = null;
+    data.soal.forEach((s: any, index: number) => {
+      if (s.stimulus_id && s.stimulus_id !== lastStimulusId) {
+        const stimulus = data.stimulus?.find((st: any) => st.stimulus_id === s.stimulus_id);
+        if (stimulus) {
+          if (stimulus.judul) {
+            children.push(new Paragraph({ children: [new TextRun({ text: stimulus.judul, bold: true })], spacing: { after: 100 } }));
+          }
+          if (stimulus.konten) {
+            children.push(new Paragraph({ text: stimulus.konten, spacing: { after: 100 } }));
+          }
+          if (stimulus.gambar) {
+            children.push(new Paragraph({ text: `[GAMBAR: ${stimulus.gambar}]`, spacing: { after: 100 }, alignment: AlignmentType.CENTER }));
+          }
+          if (stimulus.data_tabel) {
+            children.push(createDocxTable(stimulus.data_tabel));
+            children.push(new Paragraph({ text: "", spacing: { after: 100 } }));
+          }
+        }
+        lastStimulusId = s.stimulus_id;
+      }
+
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `Soal No. ${index + 1}`, bold: true })]
+      }));
+      children.push(...renderRumusanSoal(s, data, true));
+      children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+    });
+
+    // KUNCI JAWABAN & PEMBAHASAN SECTION
+    children.push(new Paragraph({ children: [new PageBreak()] }));
+    children.push(new Paragraph({
+      alignment: AlignmentType.CENTER,
+      children: [new TextRun({ text: "KUNCI JAWABAN & PEMBAHASAN", bold: true, size: 28 })],
+      spacing: { after: 400 }
+    }));
+
+    data.soal.forEach((s: any, index: number) => {
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `Soal No. ${index + 1}`, bold: true })],
+        spacing: { after: 100 }
+      }));
+      
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `Kunci Jawaban: `, bold: true }), new TextRun({ text: Array.isArray(s.kunci_jawaban) ? s.kunci_jawaban.join(', ') : s.kunci_jawaban || '-' })],
+        spacing: { after: 100 }
+      }));
+      
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `Pembahasan: `, bold: true }), new TextRun({ text: s.pembahasan || s.penjelasan || '-' })],
+        spacing: { after: 300 }
+      }));
+    });
+
   } else {
     children.push(new Paragraph({ text: "Tidak ada soal." }));
   }
