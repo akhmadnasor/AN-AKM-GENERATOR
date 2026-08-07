@@ -122,8 +122,8 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
               <img src="https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk" alt="Logo" style={{ width: 48, height: 48, objectFit: "contain" }} />
             </div>
             
-            <div className="flex flex-col items-center justify-center text-center w-full mb-8">
-              <h2 className="glowing-text text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 tracking-tight" style={{ lineHeight: 1.2 }}>{mode === 'login' ? 'Selamat Datang' : 'Buat Akun'}</h2>
+            <div className="flex flex-col items-center justify-center text-center w-full mb-6">
+              <h2 className="glowing-text text-2xl sm:text-3xl font-bold mb-2 tracking-tight">{mode === 'login' ? 'Selamat Datang' : 'Buat Akun'}</h2>
               <p className="text-sm sm:text-base text-slate-500 max-w-sm">{mode === 'login' ? 'Masuk untuk mulai menyusun soal.' : 'Hanya nama pengguna yang menjadi data profil.'}</p>
             </div>
 
@@ -139,11 +139,10 @@ export default function Auth({ onLogin, settings }: { onLogin: (data: any) => vo
               <label>Kata Sandi
                 <div className="password-wrap">
                   <input 
-                    type="text" 
-                    style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' }}
+                    type={showPassword ? "text" : "password"} 
                     value={password} 
                     onChange={e => setPassword(e.target.value)} 
-                    placeholder="Masukkan kata sandi" 
+                    placeholder="Masukkan kata sandi" autoComplete={mode === "login" ? "current-password" : "new-password"} 
                     required 
                   />
                   <button type="button" className="password-toggle flex items-center justify-center" onClick={() => setShowPassword(!showPassword)} aria-label="Tampilkan sandi">

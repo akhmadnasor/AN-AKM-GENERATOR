@@ -34,7 +34,7 @@ const subjects = [
 let settings = {
   appName: "AN/AKM Soal Generator",
   tagline: "Soal Bermutu, Pembelajaran Maju",
-  logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Lambang_Kabupaten_Pasuruan.png",
+  logoUrl: "https://lh3.googleusercontent.com/d/1FV7EmCnGHRbpQvbbdrRv-t0KZCUXbIqk",
   primaryColor: "#1259C3",
   secondaryColor: "#3B82F6",
   footerText: "AN/AKM Soal Generator",

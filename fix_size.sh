@@ -1,0 +1,2 @@
+sed -i -e 's|className="flex flex-col items-center justify-center text-center w-full mb-8"|className="flex flex-col items-center justify-center text-center w-full mb-6"|g' src/components/Auth.tsx
+sed -i -e 's|className="glowing-text text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 tracking-tight" style={{ lineHeight: 1.2 }}|className="glowing-text text-2xl sm:text-3xl font-bold mb-2 tracking-tight"|g' src/components/Auth.tsx
